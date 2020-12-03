@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "heap.h"
+#include <stdbool.h>
 
 int left(int i) {
     return 2*i + 1;
@@ -9,50 +10,52 @@ int right(int i) {
     return 2*i + 2;
 }
 
-int cmp( int a, int b) {
-    if(a == b)
-        return 0;
-    else
-        return a < b ? -1 : 1;
-}
-
-void swap( Heap h, int i, int j) {
+void swap( int h[], int i, int j) {
     int temp = h[i];
     h[i] = h[j];
     h[j] = temp;
 }
 
-void heapify_down ( Heap h, int i, int n ) {
-    if ( left(i) < n ) {            // i ha almeno un figlio
+// Recursive version of fixHeap
+void fixHeapRecursive ( int h[], int i, int n ) {
+    int j;
+    if ( (j = left(i)) < n ) {            // i ha almeno un figlio
 
-        int j;                      // indice del figlio di i con chiave maggiore
-        if ( left(i) == n - 1 )     // i ha solo il figlio sinistro
-            j = left(i);
-        else // i ha due figli
-            j = cmp( h[left(i)], h[right(i)] ) > 0 ? 2*i+1 : 2*i + 2;
-        
-        // se l'elemento e' fuori posto, scambio
-        if ( cmp(  h[j], h[i] ) > 0 ) {
+        if ( j != n - 1 )                 // se i ha anche un figlio destro, controllo quale e' il maggiore tra i due figli
+            j = h[j] > h[right(i)] ? j : right(i);
+
+        // j ora contiene l'indice del figlio di v di valore massimo    
+        if ( h[j] > h[i] ) {
             swap ( h, i, j );
-            heapify_down ( h, j, n );
+            fixHeapRecursive ( h, j, n );
         }
     }
 }
 
-void fixHeap( Heap h, int i, int n) {
-    int x = h[i];
-    
-}
+void fixHeap( int h[], int i, int n) {
+    int v = i, x = h[v], j;
+    bool toPlace = true;
+    do {
+        if( (j = left(v)) >= n)             // v e' una foglia, non ha figli
+            toPlace = false;
+        else {
+            if(j + 1 < n && h[j+1] > h[j]) // true se v ha un figlio destro, e che e' maggiore del figlio sinistro
+                j += 1;
 
-void print_heap( Heap h, int n ) {
-    for(int i = 0; i < n; i++) {
-        printf("%d ", h[i] );
-    }
-    printf("\n");
+            // j ora contiene l'indice del figlio di v di valore massimo
+            if (h[j] > x) {
+                h[v] = h[j];
+                v = j;
+            } else {
+                toPlace = false;
+            }
+        }
+    } while (toPlace);
+    h[v] = x;
 }
 
 void createHeap(int a[], int n) {
     for(int i = n/2; i >= 0; i--) {
-        heapify_down(a, i, n);
+        fixHeap(a, i, n);
     }
 }
