@@ -39,6 +39,11 @@ void heapify_down ( Heap h, int i, int n ) {
     }
 }
 
+void fixHeap( Heap h, int i, int n) {
+    int x = h[i];
+    
+}
+
 void print_heap( Heap h, int n ) {
     for(int i = 0; i < n; i++) {
         printf("%d ", h[i] );
