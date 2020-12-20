@@ -2,7 +2,7 @@
 #include<stdio.h>
 #define N 6
 
-void stampa (int a[], int lung);
+void printArray (int a[], int lung);
 void insertionsort(int a[], int n);
 
 int main() {
@@ -14,12 +14,12 @@ int main() {
 
     insertionsort(a, N);
 
-    stampa(a, N);
+    printArray(a, N);
 
     return 0;
 }
 
-void stampa (int a[], int len) {
+void printArray (int a[], int len) {
     printf("[ ");
     int i;
     for(i = 0; i < len - 1; i++) {

@@ -2,8 +2,8 @@
 #include<stdio.h>
 #define N 6
 
-void stampa (int a[], int lung);
-void scambia(int a[], int i, int j);
+void printArray (int a[], int lung);
+void swap(int a[], int i, int j);
 void selectionsort(int a[], int n);
 void selectionsort_rec(int a[], int n);
 
@@ -16,12 +16,12 @@ int main() {
 
     selectionsort(a, N);
 
-    stampa(a, N);
+    printArray(a, N);
 
     return 0;
 }
 
-void stampa (int a[], int len) {
+void printArray (int a[], int len) {
     printf("[ ");
     int i;
     for(i = 0; i < len - 1; i++) {
@@ -30,7 +30,7 @@ void stampa (int a[], int len) {
     printf("%d ]\n", a[i]);
 }
 
-void scambia(int a[], int i, int j) {
+void swap(int a[], int i, int j) {
     int temp = a[i];
     a[i] = a[j];
     a[j] = temp;
@@ -43,7 +43,7 @@ void selectionsort_rec(int a[], int n) {
             if(a[i] > a[max])
                 max = i;
 
-        scambia(a, max, n-1);
+        swap(a, max, n-1);
         selectionsort_rec(a, n-1);
     }
 }
@@ -55,6 +55,6 @@ void selectionsort(int a[], int n) {
         for (int j = i + 1; j < n; j++) 
             if(a[j] < a[min])
                 min = j;
-        scambia(a, min, i);
+        swap(a, min, i);
     }
 }
