@@ -1,33 +1,31 @@
-#include <stdio.h>
+#include "../array-utils.h"
 
-void swap(int a[], int i, int j);
 int partition(int a[], int i, int f);
 void quickSort(int a[], int i, int f);
-void printArray (int a[], int len);
 
 int main() {
-    int a[] = {4, 23, 67, -190, 80, 3};
-
-    quickSort(a, 0, 6);
+    int *a, n;
     
-    printArray(a, 6);
+    a = scanArray(&n);
+
+    quickSort(a, 0, n);
+    printArray(a, n);
 
     return 0;
 }
 
-void printArray (int a[], int len) {
-    printf("[ ");
-    int i;
-    for(i = 0; i < len - 1; i++) {
-        printf("%d, ", a[i]);
+void quickSort(int a[], int i, int f) {
+    while(f - i > 1) {
+        int m = partition(a, i, f);
+        // order smallest part recursively, and biggest part iteratively
+        if(m - i < f - m) {
+            quickSort(a, i, m);
+            i = m + 1;
+        } else  {
+            quickSort(a, m + 1, f);
+            f = m;
+        }
     }
-    printf("%d ]\n", a[i]);
-}
-
-void swap(int a[], int i, int j) {
-    int temp = a[i];
-    a[i] = a[j];
-    a[j] = temp;
 }
 
 int partition(int a[], int i, int f) {
@@ -51,17 +49,5 @@ int partition(int a[], int i, int f) {
     return right;
 }
 
-void quickSort(int a[], int i, int f) {
-    while(f - i > 1) {
-        int m = partition(a, i, f);
-        // order smallest part recursively, and biggest part iteratively
-        if(m - i < f - m) {
-            quickSort(a, i, m);
-            i = m + 1;
-        } else  {
-            quickSort(a, m + 1, f);
-            f = m;
-        }
-    }
-}
+
 

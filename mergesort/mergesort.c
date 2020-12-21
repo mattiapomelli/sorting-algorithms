@@ -1,30 +1,36 @@
-#include<stdlib.h>
-#include<stdio.h>
-#define N 8
+#include "../array-utils.h"
 
-void printArray (int a[], int lung);
-void doMergesort(int a[], int n);
+void doMergeSort(int a[], int n);
+void merge(int a[], int i, int m, int f, int x[]);
+void mergeSort(int a[], int i, int f, int x[]);
 
 int main() {
-    int a[N];
+    int *a, n;
+    
+    a = scanArray(&n);
 
-    for (int i = 0; i < N; i++) {
-        scanf("%d", &a[i]);
-    }
-
-    doMergesort(a, N);
-    printArray(a, N);
+    doMergeSort(a, n);
+    printArray(a, n);
 
     return 0;
 }
 
-void printArray (int a[], int lung) {
-    printf("[ ");
-    int i;
-    for(i = 0; i < lung - 1; i++) {
-        printf("%d, ", a[i]);
+void doMergeSort(int a[], int n) {
+    int x[n];
+    mergeSort(a, 0, n, x);
+}
+
+/*
+    i: first index of part to order
+    f: first index after part to order
+*/
+void mergeSort(int a[], int i, int f, int x[]) {
+    if (f - i > 1) {
+        int m = (i + f) / 2;
+        mergeSort(a, i, m, x);
+        mergeSort(a, m, f, x);
+        merge(a, i, m, f, x);
     }
-    printf("%d ]\n", a[i]);
 }
 
 /*
@@ -67,20 +73,5 @@ void merge(int a[], int i, int m, int f, int x[]) {
     }
 }
 
-/*
-    i: first index of part to order
-    f: first index after part to order
-*/
-void mergesort(int a[], int i, int f, int x[]) {
-    if (f - i > 1) {
-        int m = (i + f) / 2;
-        mergesort(a, i, m, x);
-        mergesort(a, m, f, x);
-        merge(a, i, m, f, x);
-    }
-}
 
-void doMergesort(int a[], int n) {
-    int x[n];
-    mergesort(a, 0, n, x);
-}
+

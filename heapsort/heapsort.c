@@ -1,38 +1,58 @@
-#include <stdio.h>
-#include "heap.h"
+#include <stdbool.h>
+#include "../array-utils.h"
 
-#define N 8
+void fixHeap( int a[], int r, int l);
+void createHeap(int a[], int n);
+void heapSort(int a[], int n);
 
-void print_array( int a[], int n ) {
+int main() {
+    int *a, n;
 
-    printf("[");
-    int i;
-    if(n > 0) {
-        for(i = 0; i < n-1; i++) {
-            printf("%d, ", a[i]);
-        }
-        printf("%d", a[i]);
-    }
-    printf("]\n");
+    a = scanArray(&n);
+
+    heapSort(a, n);
+    printArray(a, n);
+
+    return 0;
 }
 
 void heapSort(int a[], int n) {
     createHeap(a, n);
-    for(int i = n - 1; i >= 1; i--) {
-        swap(a, 0, i);
-        fixHeap(a, 0, i);
+    for(int l = n - 1; l >= 1; l--) {
+        swap(a, 0, l);      // remove last leaf and put value in the root
+        fixHeap(a, 0, l);
     }
 }
 
-int main() {
-    int a[N];
-
-    for(int i = 0; i < N; i++) {
-        scanf("%d", &a[i]);
+void createHeap(int a[], int n) {
+    for(int i = n/2; i >= 0; i--) {
+        fixHeap(a, i, n);
     }
-
-    heapSort(a, N);
-    print_array(a, N);
-
-    return 0;
 }
+
+void fixHeap( int a[], int r, int l) {
+    int v = r;
+    int x = a[v];       // element to push down
+    int j;
+    bool toPlace = true;
+    do {
+        if( (j = 2*v + 1) >= l )             // v is a leaf, doesn't have children nodes
+            toPlace = false;
+        else {
+            if(j + 1 < l && a[j+1] > a[j])  // true if v has has a right child which is greater than the left one
+                j += 1;
+
+            // j contains the index of the greatest child of v
+            if (a[j] > x) {
+                a[v] = a[j];
+                v = j;
+            } else {
+                toPlace = false;
+            }
+        }
+    } while (toPlace);
+    a[v] = x;
+}
+
+
+
